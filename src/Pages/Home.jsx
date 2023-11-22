@@ -2,12 +2,24 @@ import React,{useEffect, useState} from 'react';
 import styled from "styled-components";
 import axios from 'axios';
 import { Box, Modal, Select , MenuItem, Grid} from '@mui/material';
-
+import SelectCategory from '../Components/SelectCategory';
+import ProductsCards from '../Components/ProductsCards';
 const CatergoryWrapper = styled.div`
    display: flex;
     flex-direction: row;
   margin: 30px;
 `;
+const ProductDetailWrapper = styled.div`
+display:flex;
+ justify-content:center;
+ align-items:center;
+ flex-direction:column;
+`
+const ModalWrapper = styled.div`
+display:flex;
+ justify-content:center;
+align-items:center
+`
 
 function Home(){
     const [produtcsData, setProductsData] = useState([]);
@@ -55,56 +67,29 @@ function Home(){
     const dataToShowOnUi = filteredData.length ? filteredData : produtcsData;
     return <div>
         
-        <CatergoryWrapper >
-        <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="Age"
-            onChange={handleChangeCategory}
-        >
-            {
-                categoriesList.map((item)=> <MenuItem value={item}>{item}</MenuItem>)
-            }
-        </Select>
-        </CatergoryWrapper>
+            <CatergoryWrapper >
+                <SelectCategory handleChangeCategory={handleChangeCategory} categoriesList={categoriesList}/>
+            </CatergoryWrapper>
          
 
-
-    <Grid container spacing={3}> 
-        {
-                dataToShowOnUi.map((item)=> 
-                <Grid item xs={3} 
-                    key={item?.id}
-                    onClick={()=>handleClickProductCard(item.id)}
-                    >
-                        <Box sx={{height:"200px"}}>
-                             <img src={item?.image} width={100} height={"100%"}/>
-                        </Box>
-                        <div style={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column"}}>
-                            <p>{item.title}</p>
-                            <p>{item.price}</p>
-                        </div>
-
-                </Grid>)
-            }
-    </Grid>
-        
-<div style={{display:"flex", justifyContent:'center',alignItems:"center"}}>
-    <Modal
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="parent-modal-title"
-                    aria-describedby="parent-modal-description" 
-                    sx={{ width: "400px", height:"400px"}}      
-                 >
-                    <div style={{background:"white"}}>
-                        <img src={productDetails.image} width={100}/>
-                        <p> {productDetails?.title}   </p>
-                        <p>{productDetails?.price}</p>
-                        <p>{productDetails?.description}</p>
-                    </div>
+<ProductsCards dataToShowOnUi={dataToShowOnUi} handleClickProductCard={handleClickProductCard}/>
+           
+            <div>
+                <Modal
+                                open={open}
+                                onClose={handleClose}
+                                aria-labelledby="parent-modal-title"
+                                aria-describedby="parent-modal-description" 
+                                sx={{ width: "400px", height:"400px"}}      
+                            >
+                                <div style={{background:"white"}}>
+                                    <img src={productDetails.image} width={100}/>
+                                    <p> {productDetails?.title}   </p>
+                                    <p>{productDetails?.price}</p>
+                                    <p>{productDetails?.description}</p>
+                                </div>
                 </Modal>
-</div>
+            </div>
 
                 
     </div>
